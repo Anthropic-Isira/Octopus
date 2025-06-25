@@ -1,0 +1,6 @@
+{
+  "memory": {
+    "enabled": true,
+    "mode": "constrained"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "memory": {
+    "enabled": true,
+    "mode": "constrained"
+  },
+  "documentation": {
+    "autoIndex": true,
+    "searchPaths": ["docs", "*.md"]
+  },
+  "context": {
+    "include": ["**/*.gs", "**/*.md"],
+    "exclude": ["node_modules/**", "*.log"]
+  },
+  "codeStyle": {
+    "language": "javascript",
+    "indentation": "spaces",
+    "indentSize": 2
+  }
+}
