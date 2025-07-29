@@ -1,33 +1,76 @@
-# Advanced Google Services in Apps Script
+# Advanced Google Services
 
-[← Back to Main Documentation](../README.md)
+Advanced services in Apps Script let experienced developers connect to certain public Google APIs with less set-up than using their HTTP interfaces. Advanced services are essentially thin wrappers around those Google APIs. They work much like Apps Script's built-in services—for example, they offer autocomplete, and Apps Script handles the authorization flow automatically. However, you must enable an advanced service before you can use it in a script.
 
-## Overview
+To see which Google APIs are available as advanced services, look for the Advanced Google Services section in the Reference. If you want to use a Google API that isn't available as an advanced service, just connect to it like any other external API.
 
-Advanced Services provide access to Google APIs beyond the built-in Apps Script services. They offer more features and finer control but require additional setup.
+## Advanced Services or HTTP?
 
-## Enabling Advanced Services
+Each of the advanced Google services is associated with a public Google API. In Apps Script, you can access these APIs via advanced services or by simply making the API requests directly using UrlFetch.
 
-### Step 1: Enable in Script Editor
+If you use the advanced service method, Apps Script handles the authorization flow and offers autocomplete support. However, you must enable the advanced service before you can use it. In addition, some advanced services only provide a subset of the functionality available in the API.
 
-```javascript
-// In the Apps Script editor:
-// 1. Click "Services" in the left sidebar
-// 2. Find the service you need
-// 3. Click "Add"
-// 4. The service will appear with its identifier (e.g., Drive, Sheets, Calendar)
-```
+If you use the UrlFetch method to access the API directly, you are essentially treating the Google API as an external API. With this method, all aspects of the API can be used. However, it requires you to handle the API authorization yourself. You must also construct any needed headers and parse the API responses.
 
-### Step 2: Enable in Google Cloud Console
+In general it's easiest to use an advanced service where possible and only use the UrlFetch method when the advanced service doesn't provide the functionality you need.
 
-```javascript
-// Some services require API enablement:
-// 1. Click "Project Settings" (gear icon)
-// 2. Note your GCP project number
-// 3. Go to console.cloud.google.com
-// 4. Select your project
-// 5. Enable the required API
-```
+## Requirements
+
+Before you can use an advanced service, you must satisfy the following requirements:
+
+- You must enable the advanced service in your script project.
+- You must make sure the API corresponding to the advanced service is enabled in the Cloud Platform (GCP) project your script uses.
+
+If your script project uses a default GCP project created on or after April 8, 2019, the API is enabled automatically after you enable the advanced service and save the script project. If you have not done so already, you may also be asked to agree to the Google Cloud and Google APIs Terms of Service as well.
+
+If your script project uses a standard GCP project or an older default GCP project, you must enable the advanced service's corresponding API in the GCP project manually. You must have edit access to the GCP project to make this change.
+
+See Cloud Platform projects for more information.
+
+## Enable Advanced Services
+
+To use an advanced Google service, follow these instructions:
+
+1. Open the Apps Script project.
+2. At the left, click Editor code.
+3. At the left, next to Services, click Add a service add.
+4. Select an advanced Google service and click Add.
+
+**Note:** If you're using a standard GCP project (or an older default GCP project that was created prior to April 8, 2019), you must also manually enable the API corresponding to the advanced service. Enable the API by doing the following:
+- Open the GCP project associated with your script in the Google Cloud console.
+- At the top of the console, click into the search bar and type part of the name of the API (for example, "Calendar"), then click the name once you see it.
+- On the next screen, click Enable API.
+- Close the Google Cloud console and return to the script editor. Click OK in the dialog.
+
+After you enable an advanced service, it's available in autocomplete.
+
+## How Method Signatures are Determined
+
+Advanced services generally use the same objects, method names, and parameters as the corresponding public APIs, although method signatures are translated for use in Apps Script. The script editor's autocomplete function usually provides enough information to get started, but the rules below explain how Apps Script generates a method signature from a public Google API.
+
+Requests to Google APIs can accept a variety of different types of data, including path parameters, query parameters, a request body, and/or a media upload attachment. Some advanced services can also accept specific HTTP request headers (for example, the Calendar advanced service).
+
+The corresponding method signature in Google Apps Script has the following arguments:
+
+1. The request body (usually a resource), as a JavaScript object.
+2. Path or required parameters, as individual arguments.
+3. The media upload attachment, as a Blob argument.
+4. Optional parameters, as a JavaScript object mapping parameter names to values.
+5. HTTP request headers, as a JavaScript object mapping header names to header values.
+
+If the method doesn't have any items in a given category, that part of the signature is omitted.
+
+There are some special exceptions to be aware of:
+
+- For methods that accept a media upload, the parameter `uploadType` is set automatically.
+- Methods named `delete` in the Google API are named `remove` in Apps Script, since `delete` is a reserved word in JavaScript.
+- If an advanced service is configured to accept HTTP request headers, and you set a request headers JavaScript object, then you must also set the optional parameters JavaScript object (to an empty object if you aren't using optional parameters).
+
+## Support for Advanced Services
+
+Advanced services are just thin wrappers that enables the use of a Google APIs within Apps Script. As such, any issue encountered while using them is usually an issue with the underlying API, not with Apps Script itself.
+
+If you encounter a problem while using an advanced service, it should be reported using the support instructions for the underlying API. Links to these support instructions are provided in each advanced service guide in the Apps Script Reference section.
 
 ## Common Advanced Services
 
